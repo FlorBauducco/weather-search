@@ -4,6 +4,7 @@ import useWather from "./hook/useWeather";
 
 function App() {
   const { fetchWeather } = useWather();
+
   return (
     <>
       <h1 className={style.title}>Buscador de clima</h1>
