@@ -1,5 +1,6 @@
 import axios from "axios";
-import type { searchType, Weather } from "../types";
+import { z } from "zod";
+import type { searchType } from "../types";
 
 //Type Guards o Assertion
 // function isWeatherResponse(weather: unknown): weather is Weather {
@@ -12,6 +13,18 @@ import type { searchType, Weather } from "../types";
 //     typeof (weather as Weather).main.temp_min === "number"
 //   );
 // }
+
+//ZOD
+const Weather = z.object({
+  name: z.string(),
+  main: z.object({
+    temp: z.number(),
+    temp_max: z.number(),
+    temp_min: z.number(),
+  }),
+});
+
+type Weather = z.infer<typeof Weather>;
 
 export default function useWather() {
   const fetchWeather = async (search: searchType) => {
@@ -39,6 +52,16 @@ export default function useWather() {
       // } else {
       //   console.log('Respuesta mal formada')
       // }
+
+      //zod
+      const { data: weatherResult } = await axios(weatherUrl);
+      const result = Weather.safeParse(weatherResult);
+      if (result.success) {
+        console.log(result.data.main.temp);
+        console.log(result.data.name);
+      } else {
+        console.log("Resultado mal formado");
+      }
     } catch (error) {
       console.log(error);
     }
