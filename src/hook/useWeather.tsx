@@ -1,5 +1,17 @@
 import axios from "axios";
-import type { searchType } from "../types";
+import type { searchType, Weather } from "../types";
+
+//Type Guards o Assertion
+// function isWeatherResponse(weather: unknown): weather is Weather {
+//   return (
+//     Boolean(weather) &&
+//     typeof weather === "object" &&
+//     typeof (weather as Weather).name === "string" &&
+//     typeof (weather as Weather).main.temp === "number" &&
+//     typeof (weather as Weather).main.temp_max === "number" &&
+//     typeof (weather as Weather).main.temp_min === "number"
+//   );
+// }
 
 export default function useWather() {
   const fetchWeather = async (search: searchType) => {
@@ -14,8 +26,19 @@ export default function useWather() {
 
       const weatherUrl = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`;
 
-      const { data: weatherResult } = await axios(weatherUrl);
-      console.log(weatherResult);
+      //Castear el type
+      // const { data: weatherResult } = await axios<Weather>(weatherUrl);
+      // console.log(weatherResult.main.temp);
+      // console.log(weatherResult.name);
+
+      // //Type Guards
+      // const { data: weatherResult } = await axios(weatherUrl);
+      // const result = isWeatherResponse(weatherResult);
+      // if (result) {
+      //   console.log(weatherResult.name);
+      // } else {
+      //   console.log('Respuesta mal formada')
+      // }
     } catch (error) {
       console.log(error);
     }
